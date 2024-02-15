@@ -49,21 +49,41 @@ class TestBooksCollector:
         collector = BooksCollector()
         collector.add_new_book('Гарри Поттер и Филосовский камень')
         collector.set_book_genre('Гарри Поттер и Филосовский камень', 'Фантастика')
-        collector.add_new_book('Большой куш')
-        collector.set_book_genre('Большой куш', 'Комедия')
-        collector.add_new_book('Темная башня')
-        collector.set_book_genre('Темная башня', 'Фантастика')
+        collector.add_new_book('Хижина в лесу')
+        collector.set_book_genre('Хижина в лесу', 'Ужасы')
+        collector.add_new_book('Убийство в восточном экспрессе')
+        collector.set_book_genre('Убийство в восточном экспрессе', 'Детектив')
 
         books_for_children = collector.get_books_for_children()
         assert len(books_for_children) == 1
 
     def test_add_book_in_favorites(self):
         collector = BooksCollector()
+        collector.add_new_book('Метро 2033')
+        collector.add_new_book('1984')
         collector.add_book_in_favorites('Метро 2033')
-        assert collector.get_list_of_favorites_books() == ['Метро 2033']
+        collector.add_book_in_favorites('1984')
+        assert collector.get_list_of_favorites_books() == ['Метро 2033','1984']
 
     def test_delete_book_in_favorites(self):
         collector = BooksCollector()
         collector.add_book_in_favorites('Метро 2033')
+        collector.add_book_in_favorites('1984')
         collector.delete_book_from_favorites('Метро 2033')
-        assert collector.get_list_of_favorites_books() == []
+        assert collector.get_list_of_favorites_books() == ['1984']
+
+    def test_get_list_of_favorites_books(self):
+        collector = BooksCollector()
+        collector.add_book_in_favorites('Метро 2033')
+        assert 'Метро 2033' in collector.get_list_of_favorites_books()
+        assert len(collector.get_list_of_favorites_books()) == 1
+
+        collector.add_book_in_favorites('1984')
+        assert 'Метро 2033' in collector.get_list_of_favorites_books()
+        assert '1984' in collector.get_list_of_favorites_books()
+        assert len(collector.get_list_of_favorites_books()) == 2
+
+        collector.delete_book_from_favorites('Метро 2033')
+        assert 'Метро 2033' not in collector.get_list_of_favorites_books()
+        assert '1984' in collector.get_list_of_favorites_books()
+        assert len(collector.get_list_of_favorites_books()) == 1
